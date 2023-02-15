@@ -9,7 +9,7 @@ import os
 # from sklearn.model_selection import train_test_split
 
 pd.options.display.max_colwidth = 500
-df = pd.read_csv('data/it_dataset.csv')
+df = pd.read_csv('data/it_dataset_sample.csv')
 df = df[df['description'].apply(len)<2000]
 df.columns = ['X','Y']
 
@@ -17,17 +17,17 @@ df.columns = ['X','Y']
 df_for_split = df.dropna()
 # len_df = len(df_for_split)
 # df = df.sample(len(df))
-df_train, df_test = df_for_split.iloc[:45000], df_for_split.iloc[45000:]
+df_train, df_test = df_for_split.iloc[:450], df_for_split.iloc[50:]
 pairs = df_train[['X', 'Y']].values.tolist()
 
 raw_model = '0x7194633/keyt5-large' # или 0x7194633/keyt5-base
 model = T5ForConditionalGeneration.from_pretrained(raw_model).cuda();
 tokenizer = T5Tokenizer.from_pretrained(raw_model)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-5)
+optimizer = torch.optim.Adam(model.parameters(), lr=3e-5)
 
 batch_size = 4  # сколько примеров показывем модели за один шаг
-report_steps = 3000  # раз в сколько шагов печатаем результат
+report_steps = 40  # раз в сколько шагов печатаем результат
 epochs = 3  # сколько раз мы покажем данные модели
 
 model.train()
@@ -81,7 +81,9 @@ for i, row in sample.iterrows():
 #     print(q)
 #     print(answer(q, do_sample=True, top_p=0.9))
 #     print()
-    
-new_model_name = 'keyT5-custom'  # название папки
+
+if not os.path.exists('models/'):
+    os.mkdir('models/')
+new_model_name = 'models/keyT5-custom'  # название папки
 model.save_pretrained(new_model_name)
 tokenizer.save_pretrained(new_model_name)
