@@ -77,13 +77,27 @@ class Extractor(object):
             extracted_key_skills.append(extracted)
             
         test_df['extracted_key_skills'] = extracted_key_skills
-        logging(f"Extaction was ended in {datetime.now() - start_extraction_time} seconds")
+        logging(f"Extaction was ended in {datetime.now() - start_extraction_time}")
         
         result_path = path.replace('.csv', '_result.csv')
         test_df.to_csv(result_path, index = False)
         logging(f"Result file was saved in {result_path}")
+        logging(self.get_analysis_results(test_df))
         
         
+    def get_analysis_results(self, test_df):
+        test_df['extracted_key_skills_list'] = test_df['extracted_key_skills'].str.split(';')
+        top_key_skills = test_df['extracted_key_skills_list'].apply(pd.Series).stack().reset_index(drop=True).value_counts().iloc[:5]
+        median_len = int(test_df['extracted_key_skills_list'].apply(len).median())
+
+        result_log = ''
+        result_log+=f'Num of vacancies: {len(test_df)}\n'
+        result_log+=f'Median num of ectracted key_skills: {median_len}\n'
+        result_log+='Top of ectracted key_skills in current set of vacancies:\n'
+        result_log+=top_key_skills.to_string()
+
+        
+        return result_log
         
 if __name__ == '__main__':
     fire.Fire(Extractor)
