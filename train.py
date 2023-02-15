@@ -24,7 +24,7 @@ raw_model = '0x7194633/keyt5-large' # или 0x7194633/keyt5-base
 model = T5ForConditionalGeneration.from_pretrained(raw_model).cuda();
 tokenizer = T5Tokenizer.from_pretrained(raw_model)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=1.5e-5)
+optimizer = torch.optim.Adam(model.parameters(), lr=3e-5)
 
 batch_size = 4  # сколько примеров показывем модели за один шаг
 report_steps = 40  # раз в сколько шагов печатаем результат
@@ -82,7 +82,8 @@ for i, row in sample.iterrows():
 #     print(answer(q, do_sample=True, top_p=0.9))
 #     print()
 
-os.mkdir('models/')
+if not os.path.exists('models/'):
+    os.mkdir('models/')
 new_model_name = 'models/keyT5-custom'  # название папки
 model.save_pretrained(new_model_name)
 tokenizer.save_pretrained(new_model_name)
