@@ -1,4 +1,4 @@
-
+import pandas as pd
 
 
 from flashtext.keyword import KeywordProcessor
@@ -35,17 +35,19 @@ class Searcher(object):
         pass
     
     
-    def save_skills_collection(self, area_id, key_skills):
+    def save_skills_collection(self, area_id, key_skills, overwrite = True, collection_path='share/projects/Slava/hh_ru/old_job-description-keyword-extractor/data/key_skills_collection/keu_skills_collection.csv'):
         """
         Метод сохранения ключевых слов из списка key_skills в общую таблицу для реиспользования                
         
         Output:
         None
         """
+        
+        
         pass
     
     
-    def load_skills_collection(self, area_id):
+    def load_skills_collection(self, area_id, collection_path='share/projects/Slava/hh_ru/old_job-description-keyword-extractor/data/key_skills_collection/keu_skills_collection.csv'):
         """
         Метод инициации поискового алгоритма для определенной области area_id  
         
